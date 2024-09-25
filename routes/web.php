@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,7 +19,20 @@ Route::get('/', function () {
     return view('front.index');
 });
 
-Route::view('/dashboard', 'dashboard.index')->name('dashboard.index');
+Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
+    // start admin section
+    // dump('route web file');
+
+    Route::prefix('dashboard')->name('dashboard.')->group(function () {
+        // start dashboard section
+        Route::controller(AdminController::class)->group(function () {
+            // Route::resource('/', AdminController::class);
+        });
+        // end dashboard section
+    });
+    // end admin section
+});
+// Route::view('/dashboard', 'dashboard.index')->name('dashboard.index');
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
@@ -31,3 +45,5 @@ Route::view('/dashboard', 'dashboard.index')->name('dashboard.index');
 // });
 
 // require __DIR__.'/auth.php';
+
+
